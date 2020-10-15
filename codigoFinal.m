@@ -32,7 +32,7 @@ function aptitudes = calcularAptitudes ( funcionObjetivo, poblacion )
                 columnaI = num2cell (poblacion(:,i));
                 x = columnaI(1){:};
                 y = columnaI(2){:};
-                aptitudes = [aptitudes ; funcionObjetivo(x,y)]; 
+                aptitudes = [aptitudes ; funcionObjetivo(x,y)];
         end
 end
 
@@ -78,7 +78,7 @@ end
 
 function individuoMutado = mutacion(individuo, porcentajeDeMutacion, cotas)
        individuoMutado = [];
-        for i = 1: rows(individuo) 
+        for i = 1: rows(individuo)
                 cotaInferior = cotas(i,1);
                 cotaSuperior = cotas(i,2);
                 individuoMutado = [individuoMutado; mutacionIndividual(individuo(i,1), porcentajeDeMutacion, cotaInferior, cotaSuperior)];
@@ -126,40 +126,40 @@ function graficar(funcionObjetivo, entradas)
         endif
 end
 
-function nuevaPolbacion = generarNuevaPoblacion(poblacionAntigua, numeroDeIndividuos, funcionObjetivo, cotas, porcentajeDeReproduccion, porcentajeDeMutacion)
-        nuevaPolbacion = [];
+function nuevaPoblacion = generarNuevaPoblacion(poblacionAntigua, numeroDeIndividuos, funcionObjetivo, cotas, porcentajeDeReproduccion, porcentajeDeMutacion)
+        nuevaPoblacion = [];
         aptitudesDeLaPoblacionAntigua = calcularAptitudes(funcionObjetivo, poblacionAntigua);
         [max indiceDelMasAptoDeLaPoblacionAntigua] = max(aptitudesDeLaPoblacionAntigua);
         individuoMasAptoDeLaPoblacionAntigua = poblacionAntigua(indiceDelMasAptoDeLaPoblacionAntigua);
         for i= 1:(numeroDeIndividuos/2)
                 padre1 = seleccion(funcionObjetivo, poblacionAntigua);
                 padre2 = seleccion(funcionObjetivo, poblacionAntigua);
-                nuevaPolbacion = [nuevaPolbacion reproduccion(
+                nuevaPoblacion = [nuevaPoblacion reproduccion(
                   padre1,padre2,porcentajeDeReproduccion,porcentajeDeMutacion, cotas, funcionObjetivo
                   )];
         endfor
-        aptitudesDeLaPoblacionNueva = calcularAptitudes(funcionObjetivo, nuevaPolbacion);
+        aptitudesDeLaPoblacionNueva = calcularAptitudes(funcionObjetivo, nuevaPoblacion);
         [min indiceDelMenosAptoDeLaPoblacionNueva] = min(aptitudesDeLaPoblacionNueva);
-        nuevaPolbacion(indiceDelMenosAptoDeLaPoblacionNueva) = individuoMasAptoDeLaPoblacionAntigua;
+        nuevaPoblacion(indiceDelMenosAptoDeLaPoblacionNueva) = individuoMasAptoDeLaPoblacionAntigua;
 end
 
-function generarPoblacionFinal(cantidadDePolbaciones, numeroDeIndividuos, cotas, funcionObjetivo, poblacionesIntermediasAGraficar, porcentajeDeReproduccion, porcentajeDeMutacion)
+function generarPoblacionFinal(cantidadDePoblaciones, numeroDeIndividuos, cotas, funcionObjetivo, poblacionesIntermediasAGraficar, porcentajeDeReproduccion, porcentajeDeMutacion)
         poblacionAntigua = generarPoblacionInicial(cotas,numeroDeIndividuos);
-        for i= 1: cantidadDePolbaciones
+        for i= 1: cantidadDePoblaciones
                 display('Generando poblacion numero: ')
                 display(i)
                 nuevaPoblacion = generarNuevaPoblacion(poblacionAntigua, numeroDeIndividuos, funcionObjetivo, cotas, porcentajeDeReproduccion, porcentajeDeMutacion);
                 if(length(poblacionesIntermediasAGraficar) > 0 && poblacionesIntermediasAGraficar(1) == i)
                         graficar(funcionObjetivo, nuevaPoblacion)
                         poblacionesIntermediasAGraficar = poblacionesIntermediasAGraficar(2:end);
-                        display('Pulse cualquier tecla para cerrar la grafica y continuar la ejecucion')
+                        display('Pulse cualquier tecla para cerrar la grafica y continuar la ejecución')
                         pause()
                         close()
                 endif
                 poblacionAntigua = nuevaPoblacion;
         endfor
         graficar(funcionObjetivo, nuevaPoblacion)
-        display('Pulse cualquier tecla para cerrar la grafica y terminar la ejecucion')
+        display('Pulse cualquier tecla para cerrar la grafica y terminar la ejecución')
         pause()
         close()
 end
